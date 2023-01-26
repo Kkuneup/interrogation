@@ -1,0 +1,89 @@
+#include<vector>
+#include<algorithm>
+#include<iostream>
+
+using namespace std;
+
+class Sort // interface 
+{
+public:
+	virtual void sort(vector<int>& arr) = 0;
+};
+class SelectionSort : public Sort
+{
+	// Sort을(를) 통해 상속됨
+	virtual void sort(vector<int>& arr) override
+	{
+		int n = arr.size();
+		for (int a = 0; a < n; a++)
+		{
+			for (int b = a + 1; b < n; b++)
+			{
+				if (arr[a] > arr[b]) {
+					swap(arr[a], arr[b]);
+				}
+			}
+		}
+	}
+};
+
+class BubbleSort : public Sort
+{
+	virtual void sort(vector<int>& arr) override
+	{
+		int n = arr.size();
+		for (int a = 0; a < n; a++) {
+			for (int i = 0; i < n - 1; i++)
+			{
+				if (arr[i] > arr[i + 1]) {
+					swap(arr[i], arr[i + 1]);
+				}
+			}
+		}
+	}
+};
+
+class SortPrinter
+{
+private:
+	vector<int> arr;
+	Sort* sortAlgo = nullptr;
+public:
+	void insert(int val)
+	{
+		arr.push_back(val);
+	}
+	void show()
+	{
+		for (int i = 0; i < arr.size(); i++)
+		{
+			cout << arr[i] << " ";
+		}
+		cout << endl;
+	}
+	void select(Sort* algo)
+	{
+		if (sortAlgo != nullptr) {
+			delete algo;
+		}
+		sortAlgo = algo;
+	}
+	void run()
+	{
+		sortAlgo->sort(arr);
+	}
+};
+
+int main()
+{
+	SortPrinter* sp = new SortPrinter();
+	sp->insert(2);
+	sp->insert(5);
+	sp->insert(7);
+	sp->insert(1);
+	sp->insert(2);
+	sp->select(new BubbleSort());
+	sp->run();
+	sp->show();
+	return 0;
+}
